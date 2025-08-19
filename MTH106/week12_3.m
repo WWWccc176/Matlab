@@ -1,0 +1,10 @@
+clear;
+x = 1998:2007;
+x_scal = x - 1998;
+y = [2.1, 3.4, 4.5, 5.3, 6.2, 6.6, 6.8, 7, 7.4, 7.8];
+c = polyfit(x, y, 3);
+y_2008 = c(1)*2008 + c(2);
+disp(y_2008);
+c_scal = polyfit(x_scal, y, 3);
+y_scal2008 = c_scal(1)*(2008-1998) + c_scal(2);
+disp(y_scal2008);

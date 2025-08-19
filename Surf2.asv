@@ -1,0 +1,50 @@
+% 参数化曲线的定义
+t = linspace(0, 4*pi, 300); % 参数t
+x = sin(t)+t.^2.*cos(t); % x(t)
+y = cos(t)-t.^2.*sin(t); % y(t)
+z = t;      % z(t)
+
+% 通过参数方程计算曲线上的点
+curve = [x; y; z];
+
+% 曲线的一阶导数（切向量）
+dx = gradient(x); % 对x求导
+dy = gradient(y); % 对y求导
+dz = gradient(z); % 对z求导
+T = [dx; dy; dz];
+T_mag = sqrt(sum(T.^2, 1)); % 计算向量大小
+T_unit = T ./ T_mag; % 单位化
+
+% 曲线的二阶导数（计算曲率向量）
+ddx = gradient(dx);
+ddy = gradient(dy);
+ddz = gradient(dz);
+d2r = [ddx; ddy; ddz];
+curvature_vector = cross(T, d2r, 1);
+curvature_vector_mag = sqrt(sum(curvature_vector.^2, 1));
+N = curvature_vector ./ curvature_vector_mag; % 主法向量N的计算有误，应修正为通过曲率向量计算
+
+% 计算副法向量B
+B = cross(T_unit, N, 1); % T x N -> B
+
+% 绘制原曲线
+plot3(x, y, z, 'r', 'LineWidth', 2);
+hold on;
+grid on;
+
+% 在曲线上的几个点绘制Frenet标架
+indices = 1:10:length(t); % 选择几个点进行标架的绘制
+scale = 2; % 矢量缩放因子，调整以适合绘图
+for i = indices
+    % 绘制切向量
+    quiver3(x(i), y(i), z(i), scale*T_unit(1,i), scale*T_unit(2,i), scale*T_unit(3,i), 'b', 'LineWidth', 1.5);
+    % 绘制主法向量
+    quiver3(x(i), y(i), z(i), scale*N(1,i), scale*N(2,i), scale*N(3,i), 'g', 'LineWidth', 1.5);
+    % 绘制副法向量
+    quiver3(x(i), y(i), z(i), scale*B(1,i), scale*B(2,i), scale*B(3,i), 'k', 'LineWidth', 1.5);
+end
+hold off;
+title('3D Curve with its Corrected Frenet Frame');
+xlabel('X'), ylabel('Y'), zlabel('Z');
+legend('Curve', 'Tangent (T)', 'Normal (N)', 'Binormal (B)');
+

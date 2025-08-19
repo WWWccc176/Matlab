@@ -1,0 +1,17 @@
+s = 30*randn(30,1)+180;
+amount = 1000;
+day_a_mean = 0;
+for i = 1:30
+    if s(i)<175
+        amount = amount+100;
+    end
+    if s(i)<185 && amount>=100
+        amount = amount-100;
+    end
+    if s(i)>180
+        day_a_mean = day_a_mean+1;
+    end
+end
+amount
+day_a_mean
+day_a_meanII = length(find(s>180))

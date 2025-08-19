@@ -1,0 +1,57 @@
+clear;
+clc;
+
+% --- 1) 原函数 ---
+f_numeric = @(x) exp(-x.^2/20) .* cos(5*x);
+
+% --- 2) 自动生成 100 阶泰勒多项式  ---
+taylor_order = 100;
+syms xsym
+Tseries = taylor( exp(-xsym^2/20)*cos(5*xsym), xsym, 'Order', taylor_order+1 );
+% sym2poly 会返回从最高次到常数项的一行向量
+coeffs = sym2poly( Tseries );
+% 多项式求值
+T_numeric = @(x) polyval(coeffs, x);
+
+% --- 3) 统一 x 轴和数据计算 ---
+x = -10 : 0.05 : 10;      % 用同一组 x 点绘制两个子图
+y_orig   = f_numeric(x);
+y_taylor = T_numeric(x);
+error_abs = abs(y_orig - y_taylor);
+
+% --- 4) 全局绘图参数（可按需调整） ---
+set(groot, ...
+    'DefaultLineLineWidth', 1.5, ...
+    'DefaultAxesFontSize', 12, ...
+    'DefaultAxesBox', 'on', ...
+    'DefaultAxesGridLineStyle','--', ...
+    'DefaultAxesXGrid','on', ...
+    'DefaultAxesYGrid','on' );
+
+% --- 5) 绘制 第1子图：原函数 vs. 泰勒展开 ---
+figure;
+subplot(2,1,1);
+plot(x, y_orig,   'b-',  'DisplayName','Original function');
+hold on;
+plot(x, y_taylor, 'r--', 'DisplayName',sprintf('Taylor, O(%d)',taylor_order) );
+hold off;
+xlabel('x');
+ylabel('y');
+title('Original function V.S, 30-th order Taylor expansion');
+legend('Location','best');
+xlim([-10,10]);
+ylim([-1.5,1.5]);
+
+% --- 6) 绘制 第2子图：绝对误差 ---
+subplot(2,1,2);
+plot(x, error_abs, 'k-');
+% 如果想看对数误差，换成 semilogy：
+% semilogy(x, error_abs, 'k-');
+xlabel('x');
+ylabel('|\Delta|');
+title('AbsoluteError |OF – Taylor|');
+xlim([-10,10]);
+% ylim([0, max(error_abs)*1.1]);
+
+% --- 7) 整体标题 ---
+sgtitle(sprintf('Performance comparison'), 'FontSize',14);

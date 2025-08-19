@@ -1,0 +1,14 @@
+function p = our_polyfit(x, y)
+x_bar = mean(x);
+y_bar = mean(y);
+n = length(x);
+de = 0;
+nu = 0;
+for i = 1:n
+    de = de+(x(i) - x_bar)^2;
+    nu = nu+(x(i) - x_bar)*(y(i) - y_bar);
+end
+b = nu/de;
+a = y_bar - b*x_bar;
+p = [b a];
+end

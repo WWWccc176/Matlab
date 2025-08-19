@@ -1,0 +1,5 @@
+A = Specialmatrix(10)
+np = sum(A(:) > 0)
+n0 = sum(A(:) == 0)
+nn = sum(A(:) < 0)
+max(max(A))

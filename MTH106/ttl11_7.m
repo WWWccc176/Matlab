@@ -1,0 +1,11 @@
+clear;
+data = xlsread('stockprice.xlsx');
+sp500 = data(:, 1);
+sse = data(:, 2);
+qqplot(sp500);
+figure;
+qqplot(sse);
+figure;
+hist(sp500);
+figure;
+hist(sse);
