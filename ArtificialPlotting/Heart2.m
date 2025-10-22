@@ -46,8 +46,6 @@ set(ax,'LooseInset',[0,0,0,0]);
 set(ax,'Position',[-1/5,-1/5,1+2/5,1+2/5])
 set(gcf,'Color',[0,0,0]);
 
-% text(0,0,20,'slandarer','Color','w','HorizontalAlignment','center')
-
 % 旋转爱心和星星
 theta1=0;theta2=0;theta3=0;
 while 1
